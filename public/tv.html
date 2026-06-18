@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Display</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #0d1b2a; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .title { font-size: 5vw; color: #e0e1dd; margin-bottom: 20px; }
+        .number-box { background-color: #1b263b; border: 5px solid #415a77; border-radius: 20px; padding: 50px 100px; }
+        .number { font-size: 20vw; font-weight: bold; color: #ffbc42; margin: 0; line-height: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="title">Now Serving Ticket</div>
+    <div class="number-box">
+        <p class="number" id="displayNumber">--</p>
+    </div>
+
+<script>
+    
+    const firebaseConfig = {
+        apiKey: "",
+        authDomain: "",
+        databaseURL: "",
+        projectId: ""
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    database.ref('queueInfo').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data && data.currentNumber) {
+            document.getElementById("displayNumber").innerText = data.currentNumber;
+            playBeep();
+        }
+    });
+
+    function playBeep() {
+        const context = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = context.createOscillator();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(800, context.currentTime); 
+        oscillator.connect(context.destination);
+        oscillator.start();
+        oscillator.stop(context.currentTime + 0.5);
+    }
+</script>
+
+</body>
+</html>

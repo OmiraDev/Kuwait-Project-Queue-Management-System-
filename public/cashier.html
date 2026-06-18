@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Control</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        input { font-size: 24px; padding: 10px; width: 80%; text-align: center; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px; }
+        button { background-color: #007bff; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.3s; font-weight: bold;}
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Queue Control</h2>
+    <input type="number" id="tokenNumber" placeholder="Enter Number">
+    <button onclick="updateToken()">Call Next</button>
+</div>
+
+<script>
+    
+    const firebaseConfig = {
+        apiKey: "",
+        authDomain: "",
+        databaseURL: "",
+        projectId: ""
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function updateToken() {
+        let number = document.getElementById("tokenNumber").value;
+        if(number !== "") {
+            database.ref('queueInfo').set({
+                currentNumber: number
+            });
+            document.getElementById("tokenNumber").value = ""; 
+        } else {
+            alert("Please enter a number!");
+        }
+    }
+</script>
+
+</body>
+</html>
